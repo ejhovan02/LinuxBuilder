@@ -1,0 +1,47 @@
+@page "/register"
+
+@using LinuxBuilder.Shared.Models;
+@inject AuthService AuthServ
+
+@inject NavigationManager Navigation
+
+<EditForm Model="@RegisterModel" OnValidSubmit="HandleRegister">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="email">Email:</label>
+        <InputText id="email" @bind-Value="RegisterModel.Email" />
+    </div>
+
+    <div>
+        <label for="password">Password:</label>
+        <InputText id="password" type="password" @bind-Value="RegisterModel.Password" />
+    </div>
+
+    <div>
+        <label for="confirmPassword">Confirm Password:</label>
+        <InputText id="confirmPassword" type="password" @bind-Value="RegisterModel.ConfirmPassword" />
+    </div>
+
+    <button type="submit">Register</button>
+</EditForm>
+
+@code{
+    public RegisterModel RegisterModel { get; set; } = new RegisterModel();
+
+    async Task HandleRegister()
+    {
+        var response = await AuthServ.RegisterAsync(RegisterModel);
+
+        if (response == null)
+            return;
+
+        if (response.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo("/login");
+        }
+
+    }
+
+}

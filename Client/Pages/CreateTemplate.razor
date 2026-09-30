@@ -1,0 +1,65 @@
+@page "/create-template"        
+
+@using LinuxBuilder.Shared.Models
+@inject TemplateService TemplateService
+@inject UserSessionService Session
+
+@inject NavigationManager Nav
+
+<EditForm Model="@OsTemplate" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="name">Template Name</label>
+        <InputText id="name" class="form-control" @bind-Value="OsTemplate.Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <InputTextArea id="description" class="form-control" @bind-Value="OsTemplate.Description" />
+    </div>
+
+    <div class="form-group">
+        <label for="package">Package</label>
+        
+        <InputSelect id="package"
+                    class="form-control"
+                    @bind-Value="OsTemplate.Packages">
+            <option value="">-- Select a Package --</option>
+        
+            @foreach (var package in Packages)
+            {
+                <option value="@package.Id">@package.Name</option>
+            }
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Template</button>
+</EditForm>
+
+@code{
+    public OsTemplate OsTemplate = new();
+    public List<Package> Packages { get; set; } = new List<Package>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Session.Session == null)
+        {
+            Nav.NavigateTo("/not-found");
+            return;
+        }
+        
+        OsTemplate = new OsTemplate()
+        {
+            UserId = Session.Session.userId 
+        };
+        Packages = await TemplateService.GetPackagesAsync();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        // Call the service to create the template
+        var result = await TemplateService.CreateOsTemplateAsync(OsTemplate);
+    }
+}

@@ -1,0 +1,50 @@
+@page "/login"
+
+@using LinuxBuilder.Shared.Models;
+@inject AuthService AuthServ
+@inject UserSessionService UserSession
+@inject NavigationManager Navigation
+
+<EditForm Model="@LoginModel" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="email">Email:</label>
+        <InputText id="email" @bind-Value="LoginModel.Email" />
+    </div>
+
+    <div>
+        <label for="password">Password:</label>
+        <InputText id="password" type="password" @bind-Value="LoginModel.Password" />
+    </div>
+
+    <button type="submit">Login</button>
+</EditForm>
+
+<h1>Don't have an account?</h1>
+<button @onclick="GoToRegister">Register</button>
+
+
+@code{
+    public LoginModel LoginModel { get; set; } = new LoginModel();
+
+    async Task HandleLogin()
+    {
+        var loginResponse = await AuthServ.LoginAsync(LoginModel);
+
+        if (loginResponse == null)
+        {
+            return;
+        }
+        
+        UserSession.StartSession(loginResponse.UserId, loginResponse.Token, loginResponse.Email);
+
+        Navigation.NavigateTo("/");
+    }
+
+    private void GoToRegister()
+    {
+        Navigation.NavigateTo("/register");
+    }
+}

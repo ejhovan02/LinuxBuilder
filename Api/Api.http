@@ -1,0 +1,10 @@
+###
+post http://localhost:5020/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "ejhovan02@gmail.com",
+    "password": "Test123!"
+}
+
+
