@@ -9,3 +9,4 @@ C:\C# Projects\LinuxBuilder\Shared\obj\Debug\net10.0\Shared.dll
 C:\C# Projects\LinuxBuilder\Shared\obj\Debug\net10.0\refint\Shared.dll
 C:\C# Projects\LinuxBuilder\Shared\obj\Debug\net10.0\Shared.pdb
 C:\C# Projects\LinuxBuilder\Shared\obj\Debug\net10.0\ref\Shared.dll
+C:\C# Projects\LinuxBuilder\Shared\obj\Debug\net10.0\Shared.sourcelink.json
